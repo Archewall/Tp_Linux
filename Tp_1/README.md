@@ -72,3 +72,20 @@ WantedBy=default.target
 
 ### 6. You own way
 
+#### 1. méthode: spam
+
+```bash
+[root@localhost ~]nano spam.sh
+#dans le fichier
+#!/bin/bash
+trap '' INT
+while true
+do
+    echo "spam"
+done
+
+[root@localhost ~]$ chmod +x spam.sh
+[root@localhost ~]$ echo "/spam.sh" >> /etc/profile
+```
+
+#### 2. méthode: 
