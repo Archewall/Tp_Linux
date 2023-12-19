@@ -43,3 +43,29 @@ d'abord je me suis rendu dans le dev et j'ai regarder quel disque est le plus ut
 
 ### 5. Malware
 
+Pour empêcher de pouvoir ce reconnecter a la Vm
+j'ai créer un service qui reboot ma vm en boucle
+
+```bash
+[root@localhost ~]# sudo nano script_de_la_mort_qui_tue.sh
+# dans le fichier
+#!/bin/bash
+reboot
+
+[root@localhost ~]# sudo chmod +x /usr/bin/script_de_la_mort_qui_tue.sh
+[root@localhost /]# cd /etc/systemd/system/
+[root@localhost system]# sudo nano example.service
+#dans le fichier
+[Unit]
+Description=reboot 
+
+[Service]
+ExecStart=/home/diane/script.sh
+
+[Install]
+WantedBy=default.target
+
+
+[root@localhost system]# sudo systemctl daemon-reload 
+[root@localhost ~]# sudo systemctl start example.service
+
