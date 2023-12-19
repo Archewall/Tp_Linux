@@ -68,4 +68,7 @@ WantedBy=default.target
 
 [root@localhost system]# sudo systemctl daemon-reload 
 [root@localhost ~]# sudo systemctl start example.service
+```
+
+### 6. You own way
 
