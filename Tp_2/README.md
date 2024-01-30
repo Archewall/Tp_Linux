@@ -275,4 +275,102 @@ folder43/38/file41:77777777777
 ./folder37/45/23/43/54/file43
 ```
 
+### Nouvelle conf !
 
+```bash
+[alexandre@dhcp ~]$ sudo nano /etc/dhcp/dhcpd.conf
+[alexandre@dhcp ~]$ sudo cat /etc/dhcp/dhcpd.conf
+# Nom de domaine
+option domain-name     "tp4.dhcp";
+# DNS
+option domain-name-servers     1.1.1.1;
+# temps d'expiration par défaut 
+default-lease-time 21600;
+# temsp d'expiration max (si client veut choisir un temps d'expiration précis)
+max-lease-time 21600;
+# active le dhcp dans ce lan spécifique
+authoritative;
+# adresse réseau et masque de sous réseau
+subnet 10.4.1.0 netmask 255.255.255.0 {
+    range dynamic-bootp 10.4.1.137 10.4.1.237;
+    # broadcast
+    option broadcast-address 10.4.1.255;
+    # passerelle
+    option routers 10.4.1.254;
+}
+[alexandre@dhcp ~]$ sudo systemctl restart dhcpd
+
+```
+Test !
+
+- vous avez enregistré l'adresse d'un serveur DNS
+
+```bash
+[alexandre@localhost ~]$ sudo cat /etc/resolv.conf
+search tp4.dhcp
+nameserver 1.1.1.1
+```
+
+- vous avez une nouvelle route par défaut qui a été récupérée dynamiquement
+
+```bash
+[alexandre@localhost ~]$ ip r s
+default via 10.4.1.254 dev enp0s3 proto dhcp src 10.4.1.138 metric 100
+```
+
+- la durée de votre bail DHCP est bien de 6 heures
+
+```bash
+[alexandre@dhcp ~]$ cat /var/lib/dhcpd/dhcpd.leases
+
+authoring-byte-order little-endian;
+
+lease 10.4.1.137 {
+  starts 0 2023/11/05 18:46:37;
+  ends 1 2023/11/06 00:46:37;
+  tstp 1 2023/11/06 00:46:37;
+  cltt 0 2023/11/05 18:46:37;
+  binding state active;
+  next binding state free;
+  rewind binding state free;
+  hardware ethernet 08:00:27:de:36:da;
+  uid "\001\010\000'\3366\332";
+}
+server-duid "\000\001\000\001,\332\237\214\010\000'%\270\250";
+```
+
+## Options DHCP
+
+### Nouvelle config !
+
+```
+[alexandre@dhcp ~]$ sudo nano /etc/dhcp/dhcpd.conf
+[alexandre@dhcp ~]$ sudo cat /etc/dhcp/dhcpd.conf
+
+# Nom de domaine
+option domain-name     "tp4.dhcp";
+
+# DNS
+option domain-name-servers     1.1.1.1;
+
+# temps d'expiration par défaut 
+default-lease-time 21600;
+
+# temsp d'expiration max (si client veut choisir un temps d'expiration précis)
+max-lease-time 21600;
+
+# active le dhcp dans ce lan spécifique
+authoritative;
+
+# adresse réseau et masque de sous réseau
+subnet 10.4.1.0 netmask 255.255.255.0 {
+    range dynamic-bootp 10.4.1.137 10.4.1.237;
+
+    # broadcast
+    option broadcast-address 10.4.1.255;
+
+    # passerelle
+    option routers 10.4.1.254;
+}
+[alexandre@dhcp ~]$ sudo systemctl restart dhcpd
+```
