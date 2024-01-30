@@ -228,4 +228,112 @@ Visitez votre super site web
 
 <p>NYAAAAAAAAAAAAAAAAAAH</P>
 ```
+# PARTIE 3 Net cat maison
+## III. Your own services
 
+
+## Analyse des services existants
+
+### Afficher le fichier de service SSH
+```bash
+[alexandre@localhost ~]$ systemctl status sshd
+● sshd.service - OpenSSH server daemon
+     Loaded: loaded (/usr/lib/systemd/system/sshd.service;
+
+[alexandre@localhost ~]$ sudo cat /usr/lib/systemd/system/ssh
+d.service | grep ExecStart=
+[sudo] password for alexandre:
+ExecStart=/usr/sbin/sshd -D $OPTIONS
+```
+
+### Afficher le fichier de service NGINX
+```bash
+[alexandre@localhost ~]$ systemctl status nginx
+● nginx.service - The nginx HTTP and reverse proxy server
+     Loaded: loaded (/usr/lib/systemd/system/nginx.service;
+
+[alexandre@localhost ~]$ sudo cat /usr/lib/systemd/system/nginx.service | grep ExecStart=
+[sudo] password for alexandre:
+ExecStart=/usr/sbin/nginx
+```
+
+## Création de service
+
+### Créez le fichier /etc/systemd/system/tp3_nc.service
+```bash
+[alexandre@localhost ~]$ echo $RANDOM
+25286
+
+[alexandre@localhost system]$ sudo nano tp3_nc.service
+[Unit]
+Description=Super netcat tout fou
+
+[Service]
+ExecStart=/usr/bin/nc -l 25286 -k
+```
+
+
+### Indiquer au système qu'on a modifié les fichiers de service
+
+```bash
+[alexandre@localhost system]$ sudo systemctl daemon-reload
+```
+
+### Démarrer notre service de ouf
+
+```bash
+[alexandre@localhost system]$ sudo systemctl start tp3_nc.service
+```
+
+### Vérifier que ça fonctionne
+```bash
+[alexandre@localhost system]$ sudo systemctl status tp3_nc.service
+● tp3_nc.service - Super netcat tout fou
+     Loaded: loaded (/etc/systemd/system/tp3_nc.service; sta>
+     Active: active (running) since Tue 2024-01-30 04:28:34 >
+   Main PID: 3474 (nc)
+
+[alexandre@localhost system]$ ss -saleputn| grep nc
+tcp   LISTEN 0      10           0.0.0.0:25286      0.0.0.0:*    ino:35629 sk:68 cgroup:/system.slice/tp3_nc.service <->
+tcp   LISTEN 0      10              [::]:25286         [::]:*    ino:35628 sk:69 cgroup:/system.slice/tp3_nc.service v6only:1 <->
+```
+
+### Les logs de votre service
+```bash
+[alexandre@localhost system]$ sudo journalctl -xe -u tp3_nc | grep Start
+Jan 30 04:28:34 localhost.localdomain systemd[1]: Started Etalon du cul.
+
+[alexandre@localhost system]$ sudo journalctl -xe -u tp3_nc | grep nc
+    Subject: A start job for unit tp3_nc.service has finished successfully
+     A start job for unit tp3_nc.service has finished successfully.
+Jan 30 04:49:12 localhost.localdomain nc[3474]: prout
+Jan 30 04:49:14 localhost.localdomain nc[3474]: prout
+Jan 30 04:49:16 localhost.localdomain nc[3474]: prout
+Jan 30 04:49:17 localhost.localdomain nc[3474]: prout
+Jan 30 04:49:23 localhost.localdomain nc[3474]: aaaaah pas la mm chose
+Jan 30 04:49:26 localhost.localdomain nc[3474]: caca
+Jan 30 04:49:36 localhost.localdomain nc[3474]: foutre de chien$
+Jan 30 04:49:39 localhost.localdomain nc[3474]: avion
+Jan 30 04:49:44 localhost.localdomain nc[3474]: labrador
+```
+
+
+### S'amuser à kill le processus
+```powershell
+[alexandre@localhost system]$ ps -ef | grep nc
+dbus         663       1  0 Jan29 ?        00:00:00 /usr/bin/dbus-broker-launch --scope system --audit
+root        3474       1  0 04:28 ?        00:00:00 /usr/bin/nc -l 25286 -k
+alexand+    3534    2870  0 04:58 pts/0    00:00:00 grep --color=auto nc
+[alexandre@localhost system]$ sudo kill 3474
+[alexandre@localhost system]$ sudo systemctl status tp3_nc.service
+○ tp3_nc.service - Super netcat tout fou
+     Loaded: loaded (/etc/systemd/system/tp3_nc.service; static)
+     Active: inactive (dead)
+```
+
+ ### Affiner la définition du service
+
+```bash
+[alexandre@localhost system]$ sudo nano /etc/systemd/system/tp3_nc.service
+[alexandre@localhost system]$ sudo systemctl daemon-reload
+```
