@@ -81,3 +81,26 @@ sudo nano maman
 [alexandre@Storage storage]$ sudo cat maman
 peppa
 ```
+
+# Partie 2 : Serveur de partage de fichiers
+
+Chez le host :
+```bash
+[alexandre@Storage storage]$ sudo dnf install nfs-utils
+```
+
+Chez le client :
+```bash
+[alexandre@Web ~]$ sudo dnf install nfs-utils
+```
+
+. Avoir deux dossiers sur storage.tp4.linux partagés
+````
+[alexandre@Storage storage]$ sudo mkdir site_web_1/ -p
+
+[alexandre@Storage storage]$ sudo mkdir site_web_2/ -p
+
+[alexandre@Storage storage]$ ls
+lost+found  maman  site_web_1  site_web_2
+```
+
