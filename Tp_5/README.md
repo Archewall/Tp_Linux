@@ -52,7 +52,6 @@ je lance le programme avec :
 #! /bin/bash
 #SF Aqua
 #04/03/2024
-
 TITLE=$(youtube-dl -e "$1")
 echo $TITLE
 if [ ! -d "/srv/yt/downloads/$TITLE" ]; then
@@ -61,4 +60,5 @@ fi
 
 youtube-dl -o "/srv/yt/downloads/$TITLE/$TITLE.mp4" --format mp4 "$1" 
 
+youtube-dl --get-description "$1" >> "/srv/yt/downloads/$TITLE/description"
 ```
