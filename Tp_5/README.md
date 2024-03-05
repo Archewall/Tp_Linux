@@ -55,7 +55,10 @@ je lance le programme avec :
 
 TITLE=$(youtube-dl -e "$1")
 echo $TITLE
-mkdir "/srv/yt/downloads/$TITLE"
+if [ ! -d "/srv/yt/downloads/$TITLE" ]; then
+    mkdir "/srv/yt/downloads/$TITLE"
+fi
 
-_youtube_dl -o /srv/yt/download/{$TITLE}/{$Title}.mp4 --format mp4 &> /dev/nul
+youtube-dl -o "/srv/yt/downloads/$TITLE/$TITLE.mp4" --format mp4 "$1" 
+
 ```
