@@ -44,3 +44,18 @@ Here is your random cat : https://cdn2.thecatapi.com/images/dv7.jpg
 ```
 
 ## Partie 2:
+
+je lance le programme avec :  
+
+./yt.sh
+```bash
+#! /bin/bash
+#SF Aqua
+#04/03/2024
+
+TITLE=$(youtube-dl -e "$1")
+echo $TITLE
+mkdir "/srv/yt/downloads/$TITLE"
+
+_youtube_dl -o /srv/yt/download/{$TITLE}/{$Title}.mp4 --format mp4 &> /dev/nul
+```
